@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import android.view.View;
 
 
-public class Button
+public class Button extends ViewObj
 {
 	View Parent = null;
 	

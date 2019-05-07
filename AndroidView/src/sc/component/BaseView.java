@@ -1,24 +1,30 @@
 
 package sc.component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
+
 
 public class BaseView extends View
 {
-	Paint paint;
+	List<ViewObj> childsList = new ArrayList<ViewObj>();
+	
+	// Paint paint;
 	Button btn;
 	
 	public BaseView(Context context)
 	{
 		super(context);
 		
-		paint = new Paint();
+		// paint = new Paint();
 		btn = new Button(this);
+		
+		childsList.add(btn);
 	}
 	
 	protected void onDraw(Canvas canvas)
@@ -28,7 +34,12 @@ public class BaseView extends View
 		// paint.setColor(Color.WHITE);
 		// canvas.drawCircle(300, 300, 150, paint);
 		
-		btn.Draw(canvas);
+		// btn.Draw(canvas);
+		
+		for (ViewObj iteam : childsList)
+		{
+			iteam.Draw(canvas);
+		}
 	}
 	
 	public boolean dispatchTouchEvent(MotionEvent event)
@@ -36,24 +47,29 @@ public class BaseView extends View
 		float x = event.getX();
 		float y = event.getY();
 		
-		switch (event.getAction())
+		for (ViewObj iteam : childsList)
 		{
-			case MotionEvent.ACTION_DOWN:
-				// event.getX();
-				// event.getY());
+			if(!iteam.isInRegion(x, y)) continue;
 				
-				btn.clickDown(x, y);
-				break;
-			
-			case MotionEvent.ACTION_MOVE:
-				break;
-			
-			case MotionEvent.ACTION_UP:
-				btn.click(x, y);
+			switch (event.getAction())
+			{
+				case MotionEvent.ACTION_DOWN:
+					// event.getX();
+					// event.getY());
+					
+					iteam.clickDown(x, y);
+					break;
 				
-				String curPos = event.getX() + "," + event.getY();
-				Toast.makeText(this.getContext(), curPos, Toast.LENGTH_SHORT).show();
-				break;
+				case MotionEvent.ACTION_MOVE:
+					break;
+				
+				case MotionEvent.ACTION_UP:
+					iteam.click(x, y);
+					
+					// String curPos = event.getX() + "," + event.getY();
+					// Toast.makeText(this.getContext(), curPos, Toast.LENGTH_SHORT).show();
+					break;
+			}
 		}
 		// return super.dispatchTouchEvent(event);
 		return true;
