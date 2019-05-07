@@ -1,4 +1,4 @@
-﻿
+
 package sc.component;
 
 import android.app.Activity;
